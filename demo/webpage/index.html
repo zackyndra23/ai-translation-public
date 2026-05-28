@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acme Insurance — Trusted Coverage for Every Family</title>
+  <meta name="description" content="Acme Insurance provides comprehensive coverage for homes, vehicles, and businesses. Get a quote in minutes.">
+  <meta property="og:title" content="Acme Insurance — Trusted Coverage for Every Family">
+  <meta property="og:description" content="Comprehensive insurance products with friendly customer service and fast claim processing.">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #1a1a1a; }
+    header { background: #003366; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 1.25rem; }
+    nav ul { list-style: none; display: flex; gap: 1.5rem; }
+    nav a { color: white; text-decoration: none; }
+    .hero { background: #f5f8fc; padding: 4rem 2rem; text-align: center; }
+    .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+    .hero p { font-size: 1.25rem; color: #555; max-width: 600px; margin: 0 auto 2rem; }
+    .cta { background: #ff6600; color: white; padding: 1rem 2rem; border: none; font-size: 1rem; cursor: pointer; border-radius: 4px; }
+    section { padding: 3rem 2rem; max-width: 1100px; margin: 0 auto; }
+    section h3 { font-size: 1.75rem; margin-bottom: 1rem; }
+    section p { margin-bottom: 1rem; color: #444; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .card { padding: 1.5rem; border: 1px solid #e0e0e0; border-radius: 6px; }
+    .card h4 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+    .card p { color: #666; font-size: 0.95rem; }
+    form { display: grid; gap: 1rem; max-width: 500px; margin-top: 1.5rem; }
+    form label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+    form input, form textarea { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 1rem; }
+    form button { background: #003366; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; }
+    footer { background: #1a1a1a; color: #999; padding: 2rem; text-align: center; font-size: 0.9rem; }
+    footer a { color: #ccc; margin: 0 0.5rem; }
+    code { background: #f0f0f0; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: monospace; }
+    .badge { font-size: 0.8rem; color: #888; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Acme Insurance</h1>
+    <nav>
+      <ul>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Protect what matters most.</h2>
+      <p>Comprehensive insurance for your home, your car, and your family — from a name you can trust.</p>
+      <button class="cta" type="button" title="Start your free quote now">Get a free quote</button>
+    </section>
+
+    <section id="products">
+      <h3>Our products</h3>
+      <p>We offer a wide range of policies designed to fit every stage of your life. Whether you are buying your first apartment, growing your family, or starting a business, our friendly advisors are ready to help.</p>
+      <div class="cards">
+        <article class="card">
+          <h4>Home insurance</h4>
+          <p>Protect your home against fire, theft, and natural disasters. Comprehensive coverage with flexible payment plans.</p>
+        </article>
+        <article class="card">
+          <h4>Auto insurance</h4>
+          <p>Affordable coverage for your vehicle. We handle claims quickly so you can get back on the road.</p>
+        </article>
+        <article class="card">
+          <h4>Health insurance</h4>
+          <p>Quality medical coverage for you and your family. Access to a wide network of hospitals and specialists.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="about">
+      <h3>Why choose Acme Insurance?</h3>
+      <p>For over thirty years, families and businesses have trusted us to protect what they love. Our claim approval rate is among the highest in the industry, and our customer service team is available around the clock.</p>
+      <p>We believe insurance should be simple, transparent, and human. That is why every policy comes with a dedicated advisor who knows your story.</p>
+      <p>Some technical details for developers: our API endpoint is <code>https://api.acme-insurance.example.com/v1</code> and the documentation lives at our developer portal.</p>
+    </section>
+
+    <section id="contact">
+      <h3>Get in touch</h3>
+      <p>Have a question or ready to sign up? Send us a message and we will respond within one business day.</p>
+      <form>
+        <div>
+          <label for="name">Your name</label>
+          <input id="name" type="text" placeholder="Enter your full name" required>
+        </div>
+        <div>
+          <label for="email">Email address</label>
+          <input id="email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div>
+          <label for="message">How can we help?</label>
+          <textarea id="message" rows="4" placeholder="Tell us about your insurance needs..."></textarea>
+        </div>
+        <button type="submit" title="Send your message to our team">Send message</button>
+      </form>
+    </section>
+
+    <section data-no-translate>
+      <h3>Legal notice (do not translate)</h3>
+      <p>This block is annotated with <code>data-no-translate</code> for the SDK's opt-out demo. Real-world legal copy is often left in English by regulators; the SDK should respect that and skip translation here.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Acme Insurance Demo. All rights reserved.</p>
+    <p>
+      <a href="#" title="Read our privacy policy">Privacy</a>
+      <a href="#" title="Terms of service">Terms</a>
+      <a href="#" title="Careers at Acme">Careers</a>
+    </p>
+    <p class="badge">Powered by the AI Translation API demo.</p>
+  </footer>
+</body>
+</html>

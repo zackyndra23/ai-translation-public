@@ -1,0 +1,47 @@
+# Local dev infrastructure. Production deployment uses managed services; this file
+# only exists so a developer can `docker compose up -d` and have a working backend.
+#
+# Health checks are configured so other tooling (CI, app startup scripts) can wait
+# for "healthy" status before issuing connections.
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: aitrans_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-aitrans}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpassword_ganti_apa_aja}
+      POSTGRES_DB: ${POSTGRES_DB:-aitrans_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      # `pg_isready` is cheaper than a SQL roundtrip and avoids polluting logs.
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aitrans} -d ${POSTGRES_DB:-aitrans_db}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  redis:
+    image: redis:7
+    container_name: aitrans_redis
+    restart: unless-stopped
+    # appendonly + persistence so dev cache survives container restarts.
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 3s
+
+volumes:
+  postgres_data:
+  redis_data:

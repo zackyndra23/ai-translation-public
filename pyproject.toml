@@ -1,0 +1,131 @@
+[project]
+name = "ai-translation-v1"
+version = "0.1.0"
+description = "Domain-aware AI translation API with profile system and JS SDK"
+requires-python = ">=3.11"
+readme = "README.md"
+
+# Runtime deps. Pinned to compatible minor versions so dev environments stay
+# reproducible across machines without locking the patch-level (uv.lock handles that).
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "asyncpg>=0.30",
+    "alembic>=1.14",
+    "redis>=5.2",
+    "anthropic>=0.40",
+    "structlog>=24.4",
+    "jinja2>=3.1",
+    "httpx>=0.27",
+    "passlib[argon2]>=1.7.4",
+    "pyjwt>=2.8.0",
+]
+
+[dependency-groups]
+# Dev-only tools. uv keeps these out of production installs.
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "pre-commit>=4.0",
+    "types-redis>=4.6",
+    # In-process Redis fake for cache unit tests — avoids needing a running
+    # Redis for the test suite to be runnable.
+    "fakeredis>=2.27",
+    # Demo UI. Lives in /demo and isn't required for the API to run; carried
+    # as a dev dep so a single ``uv sync`` gets everything a contributor
+    # might want.
+    "streamlit>=1.40",
+    # Translation eval metrics. sacrebleu provides chrF + BLEU + TER; we
+    # only use chrF in Phase 6 but the full lib is small and brings the
+    # other metrics in for free if we want them later.
+    "sacrebleu>=2.4",
+    # Lightweight offline language detection for the Streamlit demo
+    # (auto-set source dropdown as the user types). Pure Python, ~1MB,
+    # deterministic when DetectorFactory.seed is set.
+    "langdetect>=1.0.9",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+# --------------------------------------------------------------------------------------
+# Ruff: linter + formatter. Target py311 because that's our minimum runtime; ruff will
+# refuse to suggest syntax newer than what 3.11 supports.
+# --------------------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+# Enable a pragmatic core set. Expand later (e.g. ANN, D) when we want more discipline.
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort (import order)
+    "B",   # bugbear (likely bugs)
+    "UP",  # pyupgrade (modern syntax)
+    "SIM", # simplify
+    "RUF", # ruff-specific
+]
+ignore = [
+    "E501", # line length — formatter already handles this
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests often use bare asserts and fixture magic; relax accordingly.
+"tests/**/*.py" = ["S101", "B"]
+# FastAPI's idiomatic ``Depends(foo)`` in default values trips B008
+# ("function call in argument default"). It's THE pattern, not a bug.
+"src/api/**/*.py" = ["B008"]
+# Streamlit needs nested ``with st.expander(): with st.form():`` — combining
+# them changes layout semantics, so SIM117 doesn't apply here.
+"demo/**/*.py" = ["SIM117"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# --------------------------------------------------------------------------------------
+# Mypy: strict mode. Catches missing return types, untyped calls into typed modules,
+# implicit Any, etc. Library stubs without types are silenced individually below.
+# --------------------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_return_any = true
+show_error_codes = true
+pretty = true
+
+[[tool.mypy.overrides]]
+# Stubs for these libs are incomplete or unavailable; we accept Any from their boundary.
+module = [
+    "anthropic.*",
+    "uvicorn.*",
+    "structlog.*",
+]
+ignore_missing_imports = true
+
+# --------------------------------------------------------------------------------------
+# Pytest: asyncio_mode=auto lets us write `async def test_...` without per-test markers.
+# --------------------------------------------------------------------------------------
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+]
